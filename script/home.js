@@ -1,4 +1,4 @@
-import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory} from "./data/todo-lsit.js";
+import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory,reset} from "./data/todo-lsit.js";
 selectOption();
 titleHtml();
 finishTodoHtml();
