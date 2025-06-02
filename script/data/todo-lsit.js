@@ -44,6 +44,7 @@ export let todoList =[
 ];
 todoList=JSON.parse(localStorage.getItem("todoList"))||todoList;
 
+
 let idCount =0;
 export function addTodoList(input,selectName,originalDate,category){
     
@@ -106,4 +107,5 @@ export function resetID(){
             localStorage.setItem("id",idCount);
         })
     })
+    localStorage.setItem("todoList",JSON.stringify(todoList));
 }
