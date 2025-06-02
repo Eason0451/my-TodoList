@@ -1,10 +1,11 @@
-import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory,reset} from "./data/todo-lsit.js";
-
+import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory,reset,resetID} from "./data/todo-lsit.js";
+resetID();
 selectOption();
 titleHtml();
 finishTodoHtml();
 resetBtn();
 deletTodoHtml();
+
 todoList.forEach((item)=>{
     todoHtml(item.category);
 })
@@ -62,7 +63,6 @@ btnAdd.addEventListener("click",()=>{
         todoHtml(selectName);
         document.querySelector(".input").value="";
         document.querySelector(".dateBtn").checked=false;
-        console.log(todoList); 
     }
     dateBtnOption();
 })

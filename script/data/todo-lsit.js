@@ -43,10 +43,12 @@ export let todoList =[
     }
 ];
 todoList=JSON.parse(localStorage.getItem("todoList"))||todoList;
-let idCount =6;
+
+let idCount =0;
 export function addTodoList(input,selectName,originalDate,category){
     
     idCount++;
+    localStorage.setItem("id",idCount);
     category.todo.push({
         name:input.value,
         done:false,
@@ -54,20 +56,17 @@ export function addTodoList(input,selectName,originalDate,category){
         id:idCount
     });
     category.show=true;
-    // console.log(originalDate.value);
 }
 export function deletTodoItem(id,itemCategory){
     const array = todoList.find(item=>item.category===itemCategory);
     let newArray = array.todo;
     const index = newArray.findIndex(item=>item.id===Number(id));
     newArray.splice(index,1);
-    console.log(newArray);
 }
 
 export function finishTodoItem(index,checkboxValue){
     const id= Number(index);
     const item = todoList.flatMap(category=>category.todo).find(todos=>todos.id===id);
-    console.log(item);
     if(checkboxValue){
         item.done=true;
     }else{
@@ -87,7 +86,6 @@ export function addCategoryName(categoryName){
 
 export function deleCategory(category){
     todoList=todoList.filter(item=>item.category!==category );
-    console.log(todoList);
 }
 
 export function reset(){
@@ -97,4 +95,15 @@ export function reset(){
     })
     todoList=array;
     idCount=0;
+    localStorage.setItem("id",idCount);
+}
+
+export function resetID(){
+    todoList.forEach((item)=>{
+        item.todo.forEach((todos)=>{
+            todos.id=idCount;
+            idCount++;
+            localStorage.setItem("id",idCount);
+        })
+    })
 }
