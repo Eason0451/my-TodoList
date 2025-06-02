@@ -4,48 +4,12 @@ export let todoList =[
         default:true,
         show:true,
         todo:[]
-    // },
-    // {
-    //     category:"生活",
-    //     default:false,
-    //     show:true,
-    //     todo:[{
-    //         name:"打球",
-    //         done:false,
-    //         date:null,
-    //         id:2
-    //     },
-    //     {
-    //         name:"睡覺",
-    //         done:false,
-    //         date:null,
-    //         id:3
-    //     }]
-    // },
-    // {
-    //     category:"社團",
-    //     default:false,
-    //     show:true,
-    //     todo:[
-    //         {
-    //             name:"志工",
-    //             done:false,
-    //             date:"2025-05-13",
-    //             id:4
-    //         },
-    //         {
-    //             name:"場勘",
-    //             done:false,
-    //             date:"2025-05-14",
-    //             id:5
-    //         }
-    //     ]
     }
 ];
 todoList=JSON.parse(localStorage.getItem("todoList"))||todoList;
 
 
-let idCount =0;
+let idCount =JSON.parse(localStorage.getItem("id"))|| 0;
 export function addTodoList(input,selectName,originalDate,category){
     
     idCount++;
@@ -99,13 +63,3 @@ export function reset(){
     localStorage.setItem("id",idCount);
 }
 
-export function resetID(){
-    todoList.forEach((item)=>{
-        item.todo.forEach((todos)=>{
-            todos.id=idCount;
-            idCount++;
-            localStorage.setItem("id",idCount);
-        })
-    })
-    localStorage.setItem("todoList",JSON.stringify(todoList));
-}
