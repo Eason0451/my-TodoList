@@ -5,9 +5,7 @@ finishTodoHtml();
 resetBtn();
 deletTodoHtml();
 
-todoList.forEach((item)=>{
-    todoHtml(item.category);
-})
+
 addCategory();
 // 分類清單
 function selectOption(){
@@ -78,9 +76,15 @@ function titleHtml(){
                         <div class="category-center">
                             <span class="categoryName">${item.category}</span>
                         </div>   
-                         <div class="area">
-                            <button data-category="${item.category}" class="categoryDeleteBtn pointerEffect">X</button>
+                        <div class="set-area">
+                            <button data-category="${item.category}" class="set-button pointerEffect">...</button>
                         </div> 
+                        <div>
+                            <ul class="set-select">
+                                <li class="category-Edit"  data-category="${item.category}">編輯</li>
+                                <li class="categoryDeleteBtn" data-category="${item.category}">刪除</li>
+                            </ul>
+                        </div>
                         <img  class="eye-${item.category} show-eye pointerEffect" src="img/${item.show?"show":"hide"}.png">
                     </div>
                     <div class="todo name${item.category}">
@@ -94,6 +98,14 @@ function titleHtml(){
                         <div class="category-center">
                             <span class="categoryName">${item.category}</span>
                         </div>    
+                        <div class="set-area">
+                            <button data-category="${item.category}" class="set-button pointerEffect">...</button>
+                        </div> 
+                        <div>
+                            <ul class="set-select">
+                                <li>編輯</li>
+                            </ul>
+                        </div>
                         <img  class="eye-${item.category} show-eye pointerEffect" src="img/${item.show?"show":"hide"}.png">
                     </div>
                     <div class="todo name${item.category}">
@@ -107,6 +119,9 @@ function titleHtml(){
     showOrHide();
     deletTitle();
     save();
+    setButton();
+    editNameButton();
+    renderTodoItem();
 }
 // 渲染代辦事項Html
 function todoHtml(optionCategory){
@@ -158,6 +173,11 @@ function todoHtml(optionCategory){
     document.querySelector(`.name${optionCategory}`).innerHTML=todoHtml;
     save();
 }
+
+function renderTodoItem(){
+    todoList.forEach((item)=>{
+    todoHtml(item.category);
+})}
 
 //日期文字顏色
 function dateColor(todo){
@@ -249,7 +269,7 @@ function addCategory(){
     inputOklBtn.addEventListener("click",()=>{
         
         if(input.value===""){
-            alert("請輸入欲新增類別名稱或取消")
+            alert("請輸入類別名稱或取消")
             setTimeout(()=>input.focus(),100);
             return;
         };
@@ -264,9 +284,6 @@ function addCategory(){
             overlay.style.display="none";
             selectOption();
             input.value="";
-            todoList.forEach((item)=>{
-                todoHtml(item.category);
-            })
         }
         
     })
@@ -287,6 +304,59 @@ function deletTitle(){
     })
 }
 
+function editNameButton(){
+    document.querySelectorAll(".category-Edit").forEach(btn=>{
+         
+        btn.addEventListener("click",(e)=>{
+            const categoryTitle = btn.closest(".category-title");
+            const categoryBlock = categoryTitle.querySelector(".category-center");
+            const span = categoryTitle.querySelector(".categoryName");
+            const catetgoryName = categoryTitle.querySelector(".categoryName").textContent;
+
+            categoryBlock.insertAdjacentHTML("beforeend", `  
+                <div class=edit-block>
+                    <input class=edit-input  value="${catetgoryName}">              
+                    <div class="overlay-input-block">
+                        <button class="categoryedit-okbtn pointerEffect">確定</button>
+                        <button class="categoryedit-cancelbtn pointerEffect">取消</button>
+                    </div>
+                </div>
+            `);
+            
+            const input=categoryTitle.querySelector(".edit-input");
+            input.style.width = span.offsetWidth + 10 + "px";
+            input.select();
+            input.addEventListener("input",()=>{
+                span.innerHTML = input.value;
+                input.style.width = span.offsetWidth + 10 + "px";
+            })
+            document.querySelector(".overlay-all").style.display="flex";
+
+            // 取消
+            const cancelBnt = categoryTitle.querySelector(".categoryedit-cancelbtn");
+            cancelBnt.addEventListener("click",(e)=>{
+                document.querySelector(".overlay-all").style.display="none";
+                categoryTitle.querySelector(".edit-block").remove();
+                span.innerHTML=catetgoryName;
+            })
+
+            // 確定修改
+            const oklBnt = categoryTitle.querySelector(".categoryedit-okbtn");
+            oklBnt.addEventListener("click",(e)=>{
+                document.querySelector(".overlay-all").style.display="none";
+                categoryTitle.querySelector(".edit-block").remove();
+                const todos = todoList.find(item=>item.category===catetgoryName)
+                todos.category=input.value;
+                console.log(todoList);
+                 titleHtml();
+                 selectOption();
+            })
+
+
+        })
+    })
+}
+
 // 重置按鈕
 function resetBtn(){
     document.querySelector(".reset").addEventListener("click",()=>{
@@ -301,4 +371,37 @@ function resetBtn(){
 function save(){
     localStorage.setItem("todoList",JSON.stringify(todoList));
 }
+// 群組編輯按鈕
+function setButton(){
+    document.querySelectorAll(".set-button").forEach((btn=>{
+        const title = btn.closest(".category-title");
+        const select = title.querySelector(".set-select");
+        btn.addEventListener("click",(e)=>{
+            const btnActive= btn.classList.contains("active");
+            e.stopPropagation(); //停止往上冒泡
+            document.querySelectorAll(".set-button").forEach(b=>{
+                b.classList.remove("active");
+            });
+            document.querySelectorAll(".set-select").forEach(menu=>{
+                menu.style.display="none";
+            })
+            
+            if(!btnActive){
+                btn.classList.add("active");
+                select.style.display="block";
+            }else{
+                select.style.display="none";
+            }
+        })
+    }))
+}
+// 點擊空白處關閉清單顯示
+document.addEventListener("click",()=>{
+    document.querySelectorAll(".set-button").forEach(b=>{
+        b.classList.remove("active");
+    });
+    document.querySelectorAll(".set-select").forEach(menu=>{
+        menu.style.display="none";
+    })
+})
  

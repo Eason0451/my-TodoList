@@ -38,7 +38,7 @@
     border-bottom: 1px solid;
     padding: 15px 25px;
     font-size: 20px;
-    height: 30PX;
+    height: 20PX;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,10 +47,10 @@
     
 .area{
     position:absolute;
-    padding: 0px 0px 15px 15px;
+    padding: 0px 0px 10px 8px;
     display: inline-block;
     top: 3px;
-    right: 5px;
+    right: 0px;
     opacity: 0;
 }
 .area:hover{
@@ -63,18 +63,13 @@
 }
 .show-eye{
     position:absolute;
-    top: 3px;
-    left: 5px;
+    top: 0px;
+    left: 0px;
     display: inline-block;
     height: 13px;
     width: 24px;
  }
-.categoryDeleteBtn{
-    font-size: 7px;
-    line-height: 1;
-    padding: 3px;
-    vertical-align: top;
-}
+
 
 .category-block{
     border: 1px solid;
@@ -158,19 +153,91 @@
 .overlay{
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 2000;
     top: 0; left: 0; right: 0; bottom: 0;
     background:rgba(100, 100, 100, 0.5) ;
 }
+
+.overlay-all{
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:rgba(100, 100, 100, 0.5) ;
+}
+
 .category-block-add{
     position: relative;
 }
 .overlay-input-block{
     margin-top: 2px;
-    display: flex;
+    display: inline-block;
     justify-content: center;
     gap: 5px;
 }
 .finish-btn{
     margin: 0px 3px 0px 4px;
+}
+
+.set-area{
+    position: absolute;
+    top :-8px;
+    right: 0px;
+}
+.set-button{
+    display: block;
+    justify-content: center;
+    padding: 5px;
+    color:black;
+    background: none;
+    border: none;
+    font-size: 15px;
+}
+.set-button.active{
+    color:gray;
+}
+
+.set-button:hover{
+    color: gray;
+}
+
+.set-select{
+    position: absolute;
+    top: 5px;
+    right: -15px;
+    list-style: none;
+    font-size: 10px;
+    z-index: 1000;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    padding: 5px;
+    display: none;
+}
+.set-select li{
+    cursor: pointer;
+}
+.set-select li:hover{
+    background-color: rgb(189, 189, 189);
+}
+.edit-block{
+    position: absolute;
+    z-index: 2500;
+    display: inline-block;
+    top: 15px;
+}
+.categoryName{
+    position: relative;
+    z-index: 500;
+     display: block;
+}
+.edit-input{
+    font-size: 20px;
+}
+
+.categoryedit-okbtn,.categoryedit-cancelbtn{
+    font-size: 10px;
+    padding: 1px;
+    line-height: 1;
+    border-radius: 3px;
 }

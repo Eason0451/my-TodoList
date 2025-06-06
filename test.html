@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    .container {
+      position: relative;
+      display: inline-block;
+      border: 1px solid black;
+      padding: 10px;
+      font-family: "Times New Roman";
+      font-size: 20px;
+    }
+
+    .set-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 35px;
+      right: 5px;
+      border: 1px solid #ccc;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .dropdown ul {
+      list-style: none;
+      margin: 0;
+      padding: 5px;
+    }
+
+    .dropdown li {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .dropdown li:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <span class="set-button" id="toggleBtn">👁</span>
+  <div class="text">工作</div>
+  <div class="dropdown" id="dropdownMenu">
+    <ul>
+      <li>選項 1</li>
+      <li>選項 2</li>
+      <li>選項 3</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('toggleBtn');
+  const dropdown = document.getElementById('dropdownMenu');
+
+  toggleBtn.addEventListener('click', () => {
+    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+  });
+
+  // 可選：點畫面其他地方時自動關閉清單
+  document.addEventListener('click', (e) => {
+    if (!toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
