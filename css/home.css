@@ -117,7 +117,7 @@
     
 }
 .todo-name{
-    width: 180px;
+    width: 200px;
     padding: 0px;
     word-break: break-word;  
     line-height: 1.2;
@@ -202,6 +202,10 @@
     text-decoration: underline;
     font-size: 10px;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    width: 25.5px;
+}
+.todo-text{
+    flex: 1;
 }
 .set-select{
     position: absolute;
