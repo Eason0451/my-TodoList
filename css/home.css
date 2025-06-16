@@ -116,6 +116,9 @@
     gap: 3px;
     
 }
+.finish-btn{
+    margin-top: 1.7px;
+}
 .todo-name{
     width: 200px;
     padding: 0px;
@@ -126,10 +129,7 @@
 .todo-block > div:last-child {
     margin-bottom: 2px;
 }
-.todo-name{
-    display: flex;
-    align-items: end;
-}
+
 .todo-delet-btn{
     font-size: 10px;
     padding: 1px;
@@ -197,15 +197,13 @@
     color: black;
 }
 .dateName{
-    padding-top: 3px;
+    padding-top: 0px;
     margin-left: 5px;
     text-decoration: underline;
     font-size: 10px;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     width: 25.5px;
-}
-.todo-text{
-    flex: 1;
+    padding-bottom: 1px;
 }
 .set-select{
     position: absolute;

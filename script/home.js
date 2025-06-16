@@ -253,8 +253,8 @@ function todoHtml(array){
                         type="checkbox"
                     > 
                     <${todo.done? "del":"span"} class="todo-name">
-                        <span class="todo-text">${todo.name}</span>
-                        ${todo.date? `<span class="dateName item-name ${dateColor(todo)}">${todo.done? "<del>"+dateString(todo)+"</del>":dateString(todo)}</span>`:"" }
+                        ${todo.name}
+                        ${todo.date? `<span class="dateName item-name ${dateColor(todo)}">${dateString(todo)}</span>`:"" }
                     </${todo.done? "del":"span"}> 
                    
                     <button 
