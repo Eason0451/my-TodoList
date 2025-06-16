@@ -1,130 +1,224 @@
-import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory,reset} from "./data/todo-lsit.js";
-selectOption();
-titleHtml();
-finishTodoHtml();
-resetBtn();
-deletTodoHtml();
-
-
+import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory,editCategoryName} from "./data/todo-lsit.js";
+// 全部渲染
 addCategory();
-// 分類清單
-function selectOption(){
-    let newArray = [
-        ...todoList.filter(item=>item.show===true),
-        ...todoList.filter(item=>item.show===false)
-    ]
-    let html ="";
-    newArray.forEach((item)=>{
-        html+=`
-            <option>${item.category}</option>
-        `
-    })
-    document.querySelector(".selectCategory").innerHTML=html;
-}
-
-// 日期按鈕
-const btnDate = document.querySelector(".dateBtn");
-btnDate.addEventListener("click",()=>{
-dateBtnOption();
+document.querySelector(".second-row").innerHTML="";
+document.querySelector(".show-hide-block").innerHTML="";
+todoList.forEach((item,index)=>{
+    showHide(item,index);
+    const position = document.querySelector(".second-row");
+    insertHtml(position,"beforeend",item);
 })
-// 判斷日期是否展開
-function dateBtnOption(){
-    if(btnDate.checked){
-        document.querySelector(".date").innerHTML=`
-            <input class="dateInput first-row pointerEffect" type="date">
-        `
-    }else{
-        document.querySelector(".date").innerHTML=``
-    }
-}
 
-// 新增按鈕
-const btnAdd=document.querySelector(".addBtn");
-const date =document.querySelector(".dateBtn")
-btnAdd.addEventListener("click",()=>{
-    const input =document.querySelector(".input");
-    const originalDate =document.querySelector(".dateInput");
-    if(input.value===""){
-        alert("請輸入代辦事項!!");
-        return;
-    }else if(date.checked&&originalDate.value===""){
-        alert("請選擇完成日期或取消打勾 !!");
-        return;
-    }else{//新增代辦事項
-        const selectName = document.querySelector(".selectCategory").value;
-        const category = todoList.find(item=>item.category===selectName);
-        if (!category.show){
-            document.querySelector(`.eye-${selectName}`).src=" img/show.png";
+// first-row 渲染
+function showHide(item,index){
+    const showHideBlock = document.querySelector(".show-hide-block");
+    let html;
+    html=`
+        <div class="show-block show-${item.category}">       
+            <input class="show-hide-checkbox show-hide-checkbox-${item.category} finger" type="checkbox" ${item.show? "checked":""}>
+            <span>${item.category}</span>
+        </div>
+    `
+    showHideBlock.insertAdjacentHTML("beforeend",html);
+
+
+    // 顯示/隱藏 功能
+    const checkbox=document.querySelector(`.show-hide-checkbox-${item.category}`);
+    checkbox.addEventListener("change",()=>{
+        const isShow = item.show===true;
+        if(!isShow){
+            for(let i=index-1;i>=-1;i--){
+                const lastOne = todoList[i];
+                if(i===-1){
+                    const dom = document.querySelector(`.second-row`);
+                    item.show=true;
+                    insertHtml(dom,"afterbegin",item);
+                    return;
+                }else if(lastOne.show){
+                    const dom = document.querySelector(`.title-block-${lastOne.category}`);
+                    item.show=true;
+                    insertHtml(dom,"afterend",item);
+                    return;
+                }
+            }
+        }else if(isShow){
+            item.show=false;
+            const dom = document.querySelector(`.title-block-${item.category}`);
+            dom.remove();
         }
-        addTodoList(input,selectName,originalDate,category);
-        todoHtml(selectName);
-        document.querySelector(".input").value="";
-        document.querySelector(".dateBtn").checked=false;
+    })
+    
+    
+    
+}
+
+
+// second-row 渲染
+function insertHtml(position,inserType,categoryItem){
+    const categoryName = categoryItem.category;
+    if(categoryItem.show){
+        position.insertAdjacentHTML(`${inserType}`,titleHtml(categoryName));
+        todoHtml(categoryItem);
+        setButton(`.title-block-${categoryName}`)
+        addTodo(categoryName);
+    }else{
+        return;
     }
-    dateBtnOption();
-})
+    
+}
+
 
 // 生成類別html
-function titleHtml(){
-    let html="";
-    let defaultHtml="";
-    todoList.forEach((item,index)=>{
-        if(!item.default){
-            html+=`
-                <div class="category-block title-${item.category}">
-                    <div class="category-title">
-                        <div class="category-center">
-                            <span class="categoryName">${item.category}</span>
-                        </div>   
-                        <div class="set-area">
-                            <button data-category="${item.category}" class="set-button pointerEffect">...</button>
-                        </div> 
-                        <div>
-                            <ul class="set-select">
-                                <li class="category-Edit"  data-category="${item.category}">編輯</li>
-                                <li class="categoryDeleteBtn" data-category="${item.category}">刪除</li>
-                            </ul>
-                        </div>
-                        <img  class="eye-${item.category} show-eye pointerEffect" src="img/${item.show?"show":"hide"}.png">
-                    </div>
-                    <div class="todo name${item.category}">
-                    </div>
+function titleHtml(category){
+    const array = todoList.find(item=>item.category===category);
+    if(array.default){
+        return `
+            <div class="title-block title-block-${array.category}">
+                <span class="category-name">${array.category}</span>
+                <button class="setting-btn finger">...</button>
+                <ul class="set-select hidden">
+                    <li class="category-Edit finger li-onlyone"  data-category="${array.category}">編輯</li>
+                </ul>
+                <div class="todo-block todo-block-${array.category}">
+
                 </div>
-            `;
-        }else {
-            defaultHtml+=`
-                <div class="category-block title-${item.category}">
-                    <div class="category-title">
-                        <div class="category-center">
-                            <span class="categoryName">${item.category}</span>
-                        </div>    
-                        <div class="set-area">
-                            <button data-category="${item.category}" class="set-button pointerEffect">...</button>
-                        </div> 
-                        <div>
-                            <ul class="set-select">
-                                <li>編輯</li>
-                            </ul>
-                        </div>
-                        <img  class="eye-${item.category} show-eye pointerEffect" src="img/${item.show?"show":"hide"}.png">
-                    </div>
-                    <div class="todo name${item.category}">
-                    </div>
+                <button class="add-todo-btn finger"> + 新增事項...</button>
+            </div>
+        `
+    }else{
+        return `
+            <div class="title-block title-block-${array.category}">
+                <span class="category-name">${array.category}</span>
+                <button class="setting-btn finger">...</button>
+                <ul class="set-select hidden">
+                    <li class="category-Edit finger li-top"  data-category="${array.category}">編輯</li>
+                    <li class="category-delete-btn finger li-bottom" data-category="${array.category}">刪除</li>
+                </ul>
+                <div class="todo-block todo-block-${array.category}">
+
                 </div>
-            `;
+                <button class="add-todo-btn finger"> + 新增事項...</button>
+            </div>
+        `
+    }
+}
+
+// 群組編輯按鈕
+function setButton(titleBlock){
+    const title = document.querySelector(titleBlock);
+    const setBtn = title.querySelector(".setting-btn");
+    const select = title.querySelector(".set-select");
+    setBtn.addEventListener("click",(e)=>{
+        e.stopPropagation(); //停止往上冒泡
+        const open = setBtn.classList.contains("active");
+        document.querySelectorAll(".setting-btn").forEach(b=>{
+            b.classList.remove("active");
+        });
+        document.querySelectorAll(".set-select").forEach(menu=>{
+            menu.classList.add("hidden");
+        })
+        if(open){
+            setBtn.classList.remove("active");
+        }else{
+            setBtn.classList.add("active");
+            select.classList.remove("hidden");
         }
     })
-    document.querySelector(".category-default").innerHTML=defaultHtml;
-    document.querySelector(".category-add").innerHTML=html;
-    showOrHide();
-    deletTitle();
-    save();
-    setButton();
-    editNameButton();
-    renderTodoItem();
+
+    // 編輯
+    const editBtn = title.querySelector(".category-Edit");
+    editBtn.addEventListener("click",(e)=>{
+        document.querySelector('.overlay-hide').style.display="block";
+        const categorySpan = title.querySelector(".category-name");
+        const categoryName = categorySpan.textContent
+        categorySpan.insertAdjacentHTML("afterend",`
+                <div class=edit-block>
+                    <input class=edit-input maxlength="10"  value="${categoryName}">              
+                    <div class="edit-btn-block">
+                        <button class="categoryedit-okbtn pointerEffect finger">確定</button>
+                        <button class="categoryedit-cancelbtn pointerEffect finger">取消</button>
+                    </div>
+                </div>
+            `)
+        const input = title.querySelector(".edit-input")
+        input.select();
+        input.style.width = categorySpan.offsetWidth+10 +"px"
+        input.addEventListener("input",()=>{
+            const inputValue= input.value;
+            categorySpan.innerHTML = inputValue
+            const widthSize = categorySpan.offsetWidth;
+            if(widthSize>198){    
+                alert("名稱長度超出限制");
+                setTimeout(() => {
+                    const maxInput = inputValue.substring(0,9);
+                    input.value = maxInput;
+                    categorySpan.innerHTML=maxInput;
+                    console.log(inputValue.substring(0,9));
+                    input.style.width = widthSize+15 +"px";
+                }, 50);
+                input.value="123";
+            }else{
+                input.style.width = widthSize+15 +"px";
+            }
+        })        
+        // 編輯->取消
+        const cancelBnt = title.querySelector(".categoryedit-cancelbtn");
+        cancelBnt.addEventListener("click",(e)=>{
+            document.querySelector(".overlay-hide").style.display="none";
+            title.querySelector(".edit-block").remove();
+            categorySpan.innerHTML=categoryName;
+        })
+        // 編輯->確定
+        const okBtn = title.querySelector(".categoryedit-okbtn"); 
+        okBtn.addEventListener("click",(e)=>{
+            const newName = categorySpan.innerHTML;
+            const oldName = categoryName;
+            const repeatCheck = todoList.every(item=>item.category!==newName);
+            if (repeatCheck){
+                document.querySelector(".overlay-hide").style.display="none";
+                title.querySelector(".edit-block").remove();
+                editCategoryName(newName,oldName);
+                const oldDom = title;
+                const newItem = todoList.find(item => item.category===newName);
+                insertHtml(oldDom,"afterend",newItem);
+                oldDom.remove();
+            }else if(!repeatCheck){
+                alert("種類名稱重複了!!");
+                categorySpan.innerHTML=oldName;
+                input.select();
+            }
+            
+        })
+    })
+    // 刪除
+    const deletBtn = title.querySelector(".category-delete-btn");
+    const name = title.querySelector(".category-name");
+    const array = todoList.find(item=>item.category===name.textContent);
+    if(!array.default){
+        deletBtn.addEventListener("click",(e)=>{
+            const catgoryName = title.querySelector(".category-name").textContent;
+            if(confirm(`確定要刪除 "${catgoryName}" 類別嗎`)){
+                const deletDom = document.querySelector(`.show-${catgoryName}`)
+                deleCategory(catgoryName);
+                title.remove();
+                deletDom.remove();
+            }
+        })
+    }
+
 }
+// 點擊空白處關閉清單顯示
+document.addEventListener("click",()=>{
+    document.querySelectorAll(".setting-btn").forEach(b=>{
+        b.classList.remove("active");
+    });
+    document.querySelectorAll(".set-select").forEach(menu=>{
+        menu.classList.add("hidden");
+    })
+})
+
 // 渲染代辦事項Html
-function todoHtml(optionCategory){
+function todoHtml(array){
     // 日期文字處理 
     function dateString(todoItem){
         if(!todoItem.date){
@@ -138,46 +232,47 @@ function todoHtml(optionCategory){
         }
     }
     // 排序--完成在下,未完成在上
-    const array = todoList.find(item=>item.category===optionCategory);
     const optionObject ={...array}
+    
     let todoHtml="";
     if(optionObject.show){
         const todoItem =[
             ...optionObject.todo.filter(todo=>todo.done===false),
             ...optionObject.todo.filter(todo=>todo.done===true)
         ] 
+
         todoItem.forEach((todo)=>{
             todoHtml+=`
-                <div class="item">
+                <div class="todo-item-block">
                     <input 
                         ${todo.done? "checked":""}
-                        data-category="${optionCategory}"
+                        data-category="${array.category}"
                         data-id="${todo.id}"
-                        class="pointerEffect finish-btn" 
+                        class="finger finish-btn" 
                         name="finish" 
                         type="checkbox"
                     > 
-
-                    <${todo.done? "del":"span"} class="item-name">${todo.name}</${todo.done? "del":"span"}> 
-                    <span class="dateName item-name ${dateColor(todo)}">${todo.done? "<del>"+dateString(todo)+"</del>":dateString(todo)}</span> 
+                    <${todo.done? "del":"span"} class="todo-name">
+                        ${todo.name}
+                         <span class="dateName item-name ${dateColor(todo)}">${todo.done? "<del>"+dateString(todo)+"</del>":dateString(todo)}</span> 
+                    </${todo.done? "del":"span"}> 
+                   
                     <button 
-                    data-category="${optionCategory}"
-                    data-id="${todo.id}"
-                    class="pointerEffect item-delet-btn">
-                    刪除</button>
-                </div>            
+                        data-category="${array.Category}"
+                        data-id="${todo.id}"
+                        class="finger todo-delet-btn">
+                        刪除
+                    </button>
+                </div>       
+                <hr>     
             `;
-             
+
         })
     }
-    document.querySelector(`.name${optionCategory}`).innerHTML=todoHtml;
-    save();
+    document.querySelector(`.todo-block-${array.category}`).innerHTML=todoHtml;
+    finishTodoBtn(array);
 }
 
-function renderTodoItem(){
-    todoList.forEach((item)=>{
-    todoHtml(item.category);
-})}
 
 //日期文字顏色
 function dateColor(todo){
@@ -202,206 +297,174 @@ function dateColor(todo){
     }
 }
 
-// 隱藏顯示
-function showOrHide(){
-    const eyeImg=document.querySelectorAll(".show-eye");
-    eyeImg.forEach((item,index)=>{
-        const todoItem= todoList[index];
-        item.addEventListener("click",(e)=>{
-            if(todoItem.show===true){
-                todoItem.show=false;
-                item.src="img/hide.png"
-            }else if(todoItem.show===false){
-                todoItem.show=true;
-                item.src="img/show.png"
-            }
-            todoHtml(todoItem.category);
-            selectOption();
-        })
-    })
-}
-// 刪除代辦事項
-function deletTodoHtml(){
-    document.querySelector(".second-row").addEventListener("click",(e)=>{
-        
-        if(e.target.matches(".item-delet-btn")){
-            const itemId=e.target.dataset.id;
-            const itemCategory = e.target.dataset.category;
-            deletTodoItem(itemId,itemCategory);
-            todoHtml(itemCategory);
-        }
-    })
-
-}
-// 完成代辦事項
-
-function finishTodoHtml(){
-    document.querySelector(".second-row").addEventListener("click",(e)=>{
-        if(e.target.matches(".finish-btn")){
-            const category=e.target.dataset.category;
-            const index =e.target.dataset.id;
-            const checkboxValue=e.target.checked;
-            finishTodoItem(index,checkboxValue);
-            todoHtml(category);
-        }
-    })
-}
-// 新增類別
-function addCategory(){
-    const addBtn=document.querySelector(".category-add-btn");
-    const overlayInput =document.querySelector(".category-title-add");
-    const overlay=document.querySelector(".overlay");
-    const input =document.querySelector(".add-category-input")
-    const inputCanelBtn =document.querySelector(".add-category-deltebtn");
-    const inputOklBtn = document.querySelector(".add-category-addbtn");
-    addBtn.addEventListener("click",()=>{
-        const rect = addBtn.getBoundingClientRect();
-        overlayInput.style.left=`${rect.right-12}px`;
-        overlayInput.style.top=`${rect.top}px`;
-        addBtn.classList.add("show");
-        overlay.style.display="flex";
-        setTimeout(()=>input.focus(),100);
-    })
-    inputCanelBtn.addEventListener("click",()=>{
-        addBtn.classList.remove("show");
-        overlay.style.display="none";
-    })
-    inputOklBtn.addEventListener("click",()=>{
-        
-        if(input.value===""){
-            alert("請輸入類別名稱或取消")
-            setTimeout(()=>input.focus(),100);
-            return;
-        };
-        
-        const repeatCheck=todoList.every(item=> item.category!==input.value);
-        if(!repeatCheck){
-            alert("已建立過相同類別了!!")
-        }else{
-            addCategoryName(input.value);
-            titleHtml();
-            addBtn.classList.remove("show");
-            overlay.style.display="none";
-            selectOption();
-            input.value="";
-        }
-        
-    })
-}
-
-// 刪除按鈕
-
-function deletTitle(){
-    document.querySelectorAll(".categoryDeleteBtn").forEach((btn)=>{
+// 完成/刪除 代辦事項
+function finishTodoBtn(array){
+    // 完成
+    const categoryName = array.category;
+    const titleDom = document.querySelector(`.title-block-${categoryName}`)
+    const finishBtn = titleDom.querySelectorAll(".finish-btn")
+    finishBtn.forEach((btn)=>{
         btn.addEventListener("click",()=>{
-            const category=btn.dataset.category
-            if(confirm(`確定要刪除 "${category}" 類別嗎`)){
-                deleCategory(category);
-                document.querySelector(`.title-${category}`).remove();
-            }
-            selectOption();
+            const id = Number(btn.dataset.id);
+            const todoItem = array.todo.find(item => item.id===id);
+            const boxIsActive = btn.checked;
+            finishTodoItem(id,boxIsActive,todoItem);
+            todoHtml(array);
+        })
+    })
+
+    // 刪除
+    const delteBtn = titleDom.querySelectorAll(".todo-delet-btn");
+    delteBtn.forEach((btn)=>{
+        btn.addEventListener("click",()=>{
+            const id = Number(btn.dataset.id);
+            deletTodoItem(array,id);
+            todoHtml(array);
         })
     })
 }
 
-function editNameButton(){
-    document.querySelectorAll(".category-Edit").forEach(btn=>{
-         
-        btn.addEventListener("click",(e)=>{
-            const categoryTitle = btn.closest(".category-title");
-            const categoryBlock = categoryTitle.querySelector(".category-center");
-            const span = categoryTitle.querySelector(".categoryName");
-            const catetgoryName = categoryTitle.querySelector(".categoryName").textContent;
-
-            categoryBlock.insertAdjacentHTML("beforeend", `  
-                <div class=edit-block>
-                    <input class=edit-input  value="${catetgoryName}">              
-                    <div class="overlay-input-block">
-                        <button class="categoryedit-okbtn pointerEffect">確定</button>
-                        <button class="categoryedit-cancelbtn pointerEffect">取消</button>
+// 新增代辦事項
+function addTodo(categoryName){
+    const title = document.querySelector(`.title-block-${categoryName}`);
+    const todoBlock = title.querySelector(".todo-block")
+    const addBtn = title.querySelector(".add-todo-btn");
+    const coverlay = document.querySelector(`.overlay-hide`);
+    addBtn.addEventListener("click",()=>{
+        let html;
+        html = `
+            <div class="add-todo-wrapper" >
+                <div class="add-todo-list">
+                    <input class="add-todo-name" >
+                    <div class="date-block">
+                        <input class="date-checkbox finger" type="checkbox" >
+                        <span class="date-span">選擇日期</span>
                     </div>
                 </div>
-            `);
-            
-            const input=categoryTitle.querySelector(".edit-input");
-            input.style.width = span.offsetWidth + 10 + "px";
-            input.select();
-            input.addEventListener("input",()=>{
-                span.innerHTML = input.value;
-                input.style.width = span.offsetWidth + 10 + "px";
-            })
-            document.querySelector(".overlay-all").style.display="flex";
-
-            // 取消
-            const cancelBnt = categoryTitle.querySelector(".categoryedit-cancelbtn");
-            cancelBnt.addEventListener("click",(e)=>{
-                document.querySelector(".overlay-all").style.display="none";
-                categoryTitle.querySelector(".edit-block").remove();
-                span.innerHTML=catetgoryName;
-            })
-
-            // 確定修改
-            const oklBnt = categoryTitle.querySelector(".categoryedit-okbtn");
-            oklBnt.addEventListener("click",(e)=>{
-                document.querySelector(".overlay-all").style.display="none";
-                categoryTitle.querySelector(".edit-block").remove();
-                const todos = todoList.find(item=>item.category===catetgoryName)
-                todos.category=input.value;
-                console.log(todoList);
-                 titleHtml();
-                 selectOption();
-            })
-
-
-        })
+                <div class = "add-btn-block">
+                    <button class="add-todo-okbtn finger">新增</button>
+                    <button class="add-todo-cancelbtn finger">取消</button>
+                </div>
+                
+            </div> 
+        `
+        coverlay.style.display="block";
+        todoBlock.insertAdjacentHTML("beforeend",html);
+        const input = document.querySelector(`.add-todo-name`);
+        input.select();
+        dateBtnOption(title);
+        addTodoBtn(title,categoryName,coverlay);
     })
 }
 
-// 重置按鈕
-function resetBtn(){
-    document.querySelector(".reset").addEventListener("click",()=>{
-        if(confirm("確定要全部重置嗎?")){
-            reset();
-            titleHtml();
-            selectOption();
+// 判斷日期是否展開
+function dateBtnOption(title){
+    const dateBlock = title.querySelector(".date-block");
+    const checkBox = dateBlock.querySelector(".date-checkbox");
+    checkBox.addEventListener("click",()=>{
+        let html ;
+        if(checkBox.checked){
+            const span = dateBlock.querySelector(".date-span");
+            html = `
+                <input class="date-input" type="date">
+            `
+            dateBlock.insertAdjacentHTML("beforeend",html);
+            span.remove();
+        }else{
+            const input = dateBlock.querySelector(".date-input");
+             html = `
+                <span class="date-span">選擇日期</span> 
+            `
+            dateBlock.insertAdjacentHTML("beforeend",html);
+            input.remove();
+        }
+    })
+    
+}
+
+// 新增代辦事項->新增按鈕/取消按鈕
+
+function addTodoBtn(title,categoryName,coverlay){
+    // 新增
+    const addBlock = title.querySelector(".add-todo-wrapper");
+    const okBtn = addBlock.querySelector(".add-todo-okbtn");
+    okBtn.addEventListener("click",()=>{
+        const input = addBlock.querySelector(".add-todo-name");
+        const inputValue = input.value;
+        const dateIsOpen = addBlock.querySelector(".date-checkbox").checked;
+        const dateDom =  addBlock.querySelector(".date-input");
+        const dateValue = dateDom? dateDom.value:null;
+        const categoryItem = todoList.find(item=>item.category===categoryName);
+        if(inputValue===""){
+            alert("請輸入代辦事項!!");
+            return;
+        }else if(dateIsOpen&&!dateValue){
+            alert("請選擇日期或取消打勾 !!");
+            return;
+        }else{//新增代辦事項
+            addTodoList(inputValue,dateValue,categoryItem);
+            input.value="";
+            addBlock.remove();
+            coverlay.style.display="none";
+            todoHtml(categoryItem);
+        }
+
+        })
+    // 取消
+    const cancelBtn = addBlock.querySelector(".add-todo-cancelbtn");
+    console.log(cancelBtn)
+    cancelBtn.addEventListener("click",()=>{
+        addBlock.remove();
+        coverlay.style.display="none";
+    })
+
+}
+
+// 新增類別
+function addCategory(){
+    const overlay =document.querySelector(".overlay-hide");
+    const addBlock = document.querySelector(".add-category-block");
+    const addBtn= document.querySelector(".add-category-btn");
+    const input = addBlock.querySelector(".add-category-input");
+    const canelBtn = addBlock.querySelector(".add-category-cancelbtn");
+    const oklBtn = addBlock.querySelector(".add-category-okbtn");
+    // 呼叫addCategoryBlock
+    addBtn.addEventListener("click",()=>{
+        overlay.style.display="block";
+        addBlock.style.display="flex";
+        input.select();
+    })
+    // 取消
+    canelBtn.addEventListener("click",()=>{
+        overlay.style.display="none";
+        addBlock.style.display="none";
+    })
+    // 確定
+    oklBtn.addEventListener("click",()=>{
+        const originalInputValue = input.value;
+        const inputValue = originalInputValue.substring(0,9);
+        const isRepeat = todoList.some(item => item.category===originalInputValue);
+        if(originalInputValue===""){
+            alert("請輸入名稱!!");
+        }else if ([...originalInputValue].length>9){
+            alert("名稱不可超出9個字元!!");
+            input.select();
+        }else if (isRepeat){
+            alert("已經建立過相同名稱")
+        }else {
+            const insertBlock = document.querySelector(".second-row");
+            addCategoryName(inputValue);
+            const categoryItem = todoList.find(item=>item.category===inputValue);
+            showHide(categoryItem,todoList.length);  
+            insertHtml(insertBlock,"beforeend",categoryItem);
+            overlay.style.display="none";
+            addBlock.style.display="none";
+            
+            input.value =""
         }
     })
 }
 
-function save(){
-    localStorage.setItem("todoList",JSON.stringify(todoList));
-}
-// 群組編輯按鈕
-function setButton(){
-    document.querySelectorAll(".set-button").forEach((btn=>{
-        const title = btn.closest(".category-title");
-        const select = title.querySelector(".set-select");
-        btn.addEventListener("click",(e)=>{
-            const btnActive= btn.classList.contains("active");
-            e.stopPropagation(); //停止往上冒泡
-            document.querySelectorAll(".set-button").forEach(b=>{
-                b.classList.remove("active");
-            });
-            document.querySelectorAll(".set-select").forEach(menu=>{
-                menu.style.display="none";
-            })
-            
-            if(!btnActive){
-                btn.classList.add("active");
-                select.style.display="block";
-            }else{
-                select.style.display="none";
-            }
-        })
-    }))
-}
-// 點擊空白處關閉清單顯示
-document.addEventListener("click",()=>{
-    document.querySelectorAll(".set-button").forEach(b=>{
-        b.classList.remove("active");
-    });
-    document.querySelectorAll(".set-select").forEach(menu=>{
-        menu.style.display="none";
-    })
-})
+
+
  

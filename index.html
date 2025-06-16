@@ -1,67 +1,92 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>代辦事項</title>
-        <link rel="stylesheet" href="css/home.css">
-    </head>
-    <body>
-        <div class="input-ui">
-            <input class="input first-row" placeholder="輸入代辦事項"> 
-            <label for="list" id="category-string" class="first-row">分類</label>
-                <select id="list" name="category" class="selectCategory pointerEffect first-row">
-                </select>
-            <!-- 日期 -->
-            <input class="dateBtn pointerEffect first-row" type="checkbox"> 
-            <span  id="date-string" class="first-row">完成日期</span>
-            <div class="date first-row">
-            </div>
-            <button class="addBtn pointerEffect first-row">新增</button>
-            <button class="reset pointerEffect first-row">重置</button>
-        </div>
-        <hr>
-        
-        <div class="second-row">
-            <div class="category-default">
-                <div class="category-block">
-                    <div class="category-title">
-                        <div class="category-center">
-                        <span class="categoryName">工作</span>
-                        </div>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>My todolist</title>
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+<div class="first-row">
+    <span>顯示/隱藏 : </span>
+    <div class="show-hide-block">
 
+    </div>
+    <div class="add-category-btn-block ">
+        <button class="add-category-btn finger">+</button>
+    </div>
+    
+</div>
+<hr>
+<div class="second-row">
+    <div class="title-block">
+        <span>工作</span>
+        <button class="setting-btn">...</button>
+        <div class="todo-block">
+            <div>
+                <input class="checkbox-button" type="checkbox">
+                <span class="todo-name">寫程式</span>
+                <button class="todo-delet-btn">刪除</button>
+            </div>
+            <hr>
+            <div>
+                <input class="checkbox-button" type="checkbox">
+                <span class="todo-name">更新履歷</span>
+                <button class="todo-delet-btn">刪除</button>
+            </div> 
+            <hr>
+            <div>
+                <input class="checkbox-button" type="checkbox">
+                <span class="todo-name">更新履歷</span>
+                <button class="todo-delet-btn">刪除</button>
+            </div> 
+            <hr>
+            <div class="add-todo-wrapper" >
+                <div class="add-todo-list">
+                    <input class="add-todo-name" >
+                    <div class="date-block">
+                        <input class="date-checkbox" type="checkbox" >
+                        <!-- <span>選擇日期</span> -->
+                        <input class="dateInput  pointerEffect" type="date">
                     </div>
-                    <div class="todo name工作">
-                    </div>
-                </div>  
-
-            </div>
-            <div class="category-add">  
-                
-            </div>
-            <div class="category-add-btn-block">
-                <button class="category-add-btn pointerEffect">+</button>
-                
-            </div>
-            
-            
-        </div>
-
-        <div class="overlay-all"></div>
-
-        <div class="overlay">
-            <div class="category-title-add">
-                <div >
-                    <span >
-                        <input class="add-category-input" placeholder="新增類別名稱">
-                    </span>
+                    
                 </div>
-                <div class="overlay-input-block">
-                    <button class="add-category-addbtn pointerEffect">新增</button>
-                    <button class="add-category-deltebtn pointerEffect">取消</button>
-                </div>
-                
-            </div>
-        </div>
-           
-        <script type="module" src="script/home.js"></script>
 
-    </body>
+                <button class="add-todo-okbtn">新增</button>
+            </div> 
+        </div>
+        <button class="add-todo-btn"> + 新增事項...</button>
+    </div>
+    <!-- <div class="title-block">
+        <span>學校</span>
+        <button class="setting-btn">...</button>
+        <div class="todo-block">
+            <div>
+                <input type="checkbox">
+                <span>考試</span>
+                <button class="todo-delet-btn">刪除</button>
+            </div>
+            <div>
+                <input type="checkbox">
+                <span>回家作業</span>
+                <button class="todo-delet-btn">刪除</button>
+            </div> 
+        </div>
+        <button class="add-todo-btn"> + 新增事項...</button>
+    </div> -->
+</div>
+<div class="overlay-hide" style="display: none;">
+
+</div>
+<div class="add-category-block" style="display: none;">
+    <a id="add-category-title">新增類別</a>
+    <a id="add-category-name">名稱</a>
+    <input class="add-category-input">
+    <div class="add-category-btnblock">
+        <button class="add-category-okbtn finger">確定</button>
+        <button class="add-category-cancelbtn finger">取消</button>
+    </div>
+    
+</div>
+<script type="module" src="script/home.js"></script>
+</body>
+</html>
