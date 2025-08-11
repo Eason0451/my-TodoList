@@ -6,6 +6,7 @@
 .first-row{
     display: flex;
     align-items: center;
+    position: relative;
 }
 .first-row >span{
     margin-left: 10px;
@@ -37,6 +38,11 @@
 .add-category-btn:hover{
     background-color: rgb(235, 235, 235);
 }
+.archive-btn-block{
+    position: absolute;
+    right: 50px;
+}
+
 /* second-row */
 .second-row{
     display: flex;
@@ -91,7 +97,7 @@
     position: absolute;
     font-size: 25px;
     border: none;
-    right: 0px;
+    right: 4px;
     top: 5px;
     z-index: 1000;
     background-color: rgb(236, 236, 236);
@@ -100,14 +106,14 @@
     color: gray;
 }
 .todo-block{
-    border: 1px solid;
-    padding: 10px 5px 5px 5px;
+    
     margin-top: 40px;
     font-size: 15px;
     background-color: white;
     border-radius: 4px;
-
     height: auto;
+    padding: ;
+
 }
 .todo-block >div:not(.add-todo-wrapper){
     display: flex;
@@ -116,22 +122,42 @@
     gap: 3px;
     
 }
+.todo-item-block{
+    border-bottom: 1px solid gray;
+    padding: 5px 0px 5px 0px;
+}
+.todo-item-block:hover{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgb(216, 216, 216);
+    border-right: 1px solid rgb(216, 216, 216);
+}
 .finish-btn{
     margin-top: 1.7px;
+    height: 20px;
 }
 .todo-name{
-    width: 200px;
+    width: 180px;
     padding: 0px;
     word-break: break-word;  
     line-height: 1.2;
     margin-right: 2px;
+    font-size: 20PX;
+
 }
 .todo-block > div:last-child {
     margin-bottom: 2px;
 }
 
+
 .todo-delet-btn{
-    font-size: 10px;
+    margin-left: 3px;
+    height: 20px;
+    padding: 1px;
+    line-height: 8px;
+}
+.todo-archive-btn{
+    margin-left: 3px;
+    height: 20px;
     padding: 1px;
     line-height: 8px;
 }
@@ -208,12 +234,12 @@
 .set-select{
     position: absolute;
     top: 22px;
-    right: 0px;
+    right: 7px;
     list-style: none;
-    border: 1px black solid;
+    border: none;
     padding: 0px;
     background-color: white;
-    font-size: 14px;
+    font-size: 10px;
     border-radius: 5px;
     width: 70px;
     display: flex;
@@ -221,6 +247,7 @@
     justify-content: center;
     align-items: center;
     z-index: 2000;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.4);
 }
 .hidden{
     display: none;
@@ -262,12 +289,7 @@
 .size-name{
     margin-right: 20px;
 }
-.overlay-hide{
-    position: fixed;
-    z-index: 2000;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background:rgba(100, 100, 100, 0.5) ;
-}
+
 
 .date-input{
     display: inline-block;
@@ -318,4 +340,12 @@
 .add-category-btnblock >button:hover{
     color: rgb(124, 124, 124);
     border: 1px rgb(78, 78, 78) solid; ;
+}
+.overlay-hide{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 2000;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:rgba(100, 100, 100, 0.5) ;
 }

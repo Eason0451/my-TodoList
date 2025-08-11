@@ -1,4 +1,6 @@
 import { todoList,addTodoList,deletTodoItem,finishTodoItem,addCategoryName,deleCategory,editCategoryName} from "./data/todo-lsit.js";
+import { archiveList,archiveItem } from "./data/archiveList.js"
+import {renderTodoHtml,isDateHtml} from "./archive.js"
 // 全部渲染
 addCategory();
 document.querySelector(".second-row").innerHTML="";
@@ -257,23 +259,35 @@ function todoHtml(array){
                         ${todo.date? `<span class="dateName item-name ${dateColor(todo)}">${dateString(todo)}</span>`:"" }
                     </${todo.done? "del":"span"}> 
                    
-                    <button 
-                        data-category="${array.Category}"
-                        data-id="${todo.id}"
-                        class="finger todo-delet-btn">
-                        刪除
-                    </button>
-                </div>       
-                <hr>     
+                    <div class="todo-hide-block " style="display:none">
+                        <img 
+                            src="/img/垃圾桶.png" 
+                            class="todo-delet-btn finger"
+                            data-category="${array.Category}"
+                            data-id="${todo.id}"                        
+                        >
+                        <img 
+                            src="/img/打包.png" 
+                            class="todo-archive-btn finger"
+                            data-category="${array.Category}"
+                            data-id="${todo.id}"                        
+                        >
+                    </div>
+                </div>         
             `;
-
+            
+                    // <button 
+                    //     data-category="${array.Category}"
+                    //     data-id="${todo.id}"
+                    //     class="finger todo-delet-btn">
+                    //     刪除
+                    // </button>
         })
     }
     document.querySelector(`.todo-block-${array.category}`).innerHTML=todoHtml;
     finishTodoBtn(array);
+    showTodoHideBlock();
 }
-
-
 //日期文字顏色
 function dateColor(todo){
     if(todo.date){
@@ -297,6 +311,25 @@ function dateColor(todo){
     }
 }
 
+// 浮現刪除/封存按鈕區塊
+function showTodoHideBlock(){
+    const allBlock = document.querySelectorAll(".todo-item-block");
+
+    allBlock.forEach((block)=>{
+        block.addEventListener("mouseover",()=>{
+            const showBlock = block.querySelector(".todo-hide-block");
+            showBlock.style.display="block";
+        })
+        block.addEventListener("mouseout",()=>{
+            const showBlock = block.querySelector(".todo-hide-block");
+            showBlock.style.display="none";
+        })
+    })
+    
+
+}
+
+
 // 完成/刪除 代辦事項
 function finishTodoBtn(array){
     // 完成
@@ -318,6 +351,18 @@ function finishTodoBtn(array){
     delteBtn.forEach((btn)=>{
         btn.addEventListener("click",()=>{
             const id = Number(btn.dataset.id);
+            deletTodoItem(array,id);
+            todoHtml(array);
+        })
+    })
+
+    // 封存
+    const archiveBtn = titleDom.querySelectorAll(".todo-archive-btn");
+    archiveBtn.forEach((btn)=>{
+        btn.addEventListener("click",()=>{
+            const id = Number(btn.dataset.id);
+            archiveItem(array,id);
+            console.log(archiveList);
             deletTodoItem(array,id);
             todoHtml(array);
         })
@@ -388,7 +433,8 @@ function addTodoBtn(title,categoryName,coverlay){
     // 新增
     const addBlock = title.querySelector(".add-todo-wrapper");
     const okBtn = addBlock.querySelector(".add-todo-okbtn");
-    okBtn.addEventListener("click",()=>{
+    const input = title.querySelector(".add-todo-name");
+    function addItem(){
         const input = addBlock.querySelector(".add-todo-name");
         const inputValue = input.value;
         const dateIsOpen = addBlock.querySelector(".date-checkbox").checked;
@@ -408,11 +454,18 @@ function addTodoBtn(title,categoryName,coverlay){
             coverlay.style.display="none";
             todoHtml(categoryItem);
         }
+    }
+    okBtn.addEventListener("click",()=>{
+        addItem();
+    })
+    addBlock.addEventListener("keydown",(e)=>{
+        if(e.key==="Enter"){
+            addItem();
+        }
+    })
 
-        })
     // 取消
     const cancelBtn = addBlock.querySelector(".add-todo-cancelbtn");
-    console.log(cancelBtn)
     cancelBtn.addEventListener("click",()=>{
         addBlock.remove();
         coverlay.style.display="none";
@@ -465,6 +518,13 @@ function addCategory(){
     })
 }
 
-
-
+// 封存區按鈕
+const archiveBtn = document.querySelector(".archive-btn");
+archiveBtn.addEventListener("click",()=>{
+    const coverlay = document.querySelector(".overlay-hide");
+    const archiveBlock = document.querySelector(".archive-block");
+    coverlay.style.display = "block";
+    archiveBlock.style.display = "block";
+    renderTodoHtml(isDateHtml(7));
+})
  

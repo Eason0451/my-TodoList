@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Input 展開動畫 Demo</title>
+</head>
+<body>
+
+  <h2>🔍 Input 展開動畫 Demo</h2>
+
+  <div class="search-box">
+    <input type="text" class="search-input" placeholder="請輸入搜尋內容...">
+  </div>
+
+  <div class="btn-group">
+    <button id="showBtn">打開輸入框</button>
+    <button id="hideBtn">收起輸入框</button>
+  </div>
+
+  <script>
+    const input = document.querySelector(".search-input");
+    const showBtn = document.getElementById("showBtn");
+    const hideBtn = document.getElementById("hideBtn");
+
+    showBtn.addEventListener("click", () => {
+      input.style.display = "block";
+      // 強制觸發 reflow，讓 transition 生效
+      void input.offsetWidth;
+      input.classList.add("open");
+    });
+
+    hideBtn.addEventListener("click", () => {
+      input.classList.remove("open");
+      // 等動畫結束後再關閉顯示
+      setTimeout(() => {
+        input.style.display = "none";
+      }, 300); // 這個時間要跟 transition 時間一致
+    });
+  </script>
+
+</body>
+</html>

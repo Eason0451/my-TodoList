@@ -1,0 +1,278 @@
+.archive-block{
+    position: fixed;
+    background-color: white;
+    width: 400px;
+    height: 500px;
+    z-index: 3500;
+    top: 10%;
+    left: 30%;
+    border-radius: 15px;
+    user-select: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.overlay-hide-range{
+    border-radius: 14px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 4000;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:rgba(100, 100, 100, 0.5) ;
+}
+.archive-first-row{
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgb(243, 243, 243);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.archive-search-block{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.archive-search{
+    width: 45px;
+    margin-left: 20px;
+    z-index: 1500;
+}
+.search-input{
+    position: relative;
+    height: 30px;
+    width: 40px;
+    left: -47px;
+    z-index: 1000;
+    border-radius: 999px;
+    border: 2px black solid;
+    /* text-indent: 37px; */
+    font-size: 14px;
+    transform-origin: left;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    padding-right: 24px;
+    padding-left: 37px;
+}
+.search-input.open{
+    width: 103px;
+    opacity: 1;
+}
+.search-input.close {
+  text-indent: 0;
+    width: 40px;
+    padding-left: 0;
+    opacity: 1;
+    border-radius: 20px; /* 保持一致，不要壓縮它 */
+    margin-right: 31px;
+}
+.search-input:focus{
+    outline: none;
+    border: 2px rgb(196, 86, 86) solid;
+}
+.input-cancel{
+    position: absolute;
+    right: 60px;
+    z-index: 1500;
+    color: rgb(196, 86, 86);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20PX;
+
+}
+.archive-leave-btn{
+    display: block;
+}
+.archive-left,.archive-right{
+    font-size: 25px;
+    user-select: none;
+}
+.archive-left{
+    margin-left: 85px;
+}
+.archive-range-name{
+    display: inline-block;
+    width: 70px;
+    text-align: center;
+    font-size: 14px;
+    user-select: none;
+    position: relative;
+    top: -1.5px;
+}
+.archive-range-name.search{
+    font-size: 15px;
+    width: 156px;
+    text-align: start;
+    margin-left: 55px;
+}
+.archive-range-name.search.close{
+    margin-left: 0px;
+    width: 106px;
+}
+.archive-range-name.left{
+    margin-left: 99.11px;
+}
+.archive-range-name.right{
+    margin-right: 14.11px;
+}
+.archive-more-btn{
+    position: absolute;
+    right: 5px;
+    user-select: none;
+    box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    padding: 3px 8px;
+    color: rgb(61, 61, 61);
+    z-index: 3000;
+    height: 32px;
+}
+
+.archive-more-btn:hover{
+    background-color:rgb(228, 228, 228);
+    color: rgb(117, 117, 117);
+}
+.archive-more-btn.search{
+    margin-left: 20.2px;
+}
+.archive-second-row{
+    height: 400px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.archive-title{
+    font-size: 14px;
+    padding-top: 12px;
+    padding-bottom: 10px;
+    display: flex;
+    color: gray;
+    /* border-bottom: 1px solid gray; */
+}
+
+.archive-title-todo{
+    margin-left: 30px;
+}
+.archive-title-delet{
+    margin-left: 255px;
+}
+.archive-todo-block{
+    margin-top: 0px;
+    max-height: 330px;
+    overflow-y: auto; 
+}
+.archive-detail{
+    display: flex;
+    border-bottom: 1px solid rgb(216, 216, 216);
+    flex-direction: row;
+    align-items: start;
+    padding: 3px 0px 3px 0px;
+
+}
+.archive-detail:hover{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgb(216, 216, 216);
+    border-right: 1px solid rgb(216, 216, 216);
+}
+.archive-detail-date{
+    display: inline-flex;
+    /* text-align: center; */
+    font-size: 17px;
+    margin-left: 11px;
+    line-height: 1; 
+    font-size: 13px;
+}
+.archive-detail-todo{
+    display: inline-block;
+    font-size: 17px;
+    margin-left: 5px;
+    width: 270px;
+    max-width: 270px;
+    line-height: 1.2; 
+    word-wrap: break-word;  /* 允許長單詞或字串換行 */
+    word-break: keep-all;   /* 防止中文和數字的交界處換行 */
+    
+}
+.archive-detail-delet{
+    display: flex;
+    margin-left: 11px;
+    border-radius: 12px;
+    border: 1px gray solid;
+}
+
+.archive-leave-btn{
+    margin-left: 340px;
+}
+
+
+/* 日期區間視窗 */
+.date-range-block{
+    position: absolute;
+    background-color: white;
+    width: 250px;
+    height: 250px;
+    z-index: 5000;
+    left: 60px;
+    top: 65px;
+    border-radius: 15px;
+    padding: 10px 20px;
+    box-shadow: 0px 4px 8px rgb(0, 0, 0, 0.5);
+}
+.date-range-name{
+    display: inline-block;
+    padding-left: 5px;
+    padding-bottom: 10px;
+    color: rgb(107, 107, 107);
+    font-size: 14px;
+}
+.date-range{
+    width: 90px;
+    font-size: 10px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px rgb(104, 104, 104) solid;
+    padding-left: 10px;
+}
+.date-start{
+    margin-left: 5px;
+}
+.date-range:focus{
+    outline: none;
+    border:2px  rgb(196, 86, 86) solid;
+}
+.date-range-middle{
+    position: relative;
+    display: inline-block;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    top: 3px;
+}
+.date-range-text{
+    margin: 0px;
+    font-size: 10px;
+    color: rgb(241, 79, 79);
+}
+.date-range-text-title{
+    margin-top: 42px;
+}
+.date-range-btn-block{
+    display: flex;
+    margin-top: 10px;
+    margin-left: 62px;
+    gap: 40px;
+}
+.date-range-btn{
+    border: none;
+    border-radius: 20px;
+    padding: 5px 10px;
+    color: rgb(61, 61, 61);
+}
+.date-range-okbtn{
+    background-color: rgb(180, 236, 173);
+}
+.date-range-okbtn:hover{
+    background-color: rgb(169, 223, 162);
+}
+.date-range-cancelbtn:hover{
+    background-color: rgb(223, 223, 223);
+}

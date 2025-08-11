@@ -13,11 +13,19 @@ let idCount =JSON.parse(localStorage.getItem("id"))|| 0;
 export function addTodoList(input,dateValue,categoryItem){
     idCount++;
     localStorage.setItem("id",idCount);
+    const timestamp = Date.now();
+    const time = new Date(timestamp );
+    const year = String(time.getFullYear());
+    const mon = String(time.getMonth()+1).padStart(2,"0");
+    const day = String(time.getDate()).padStart(2,"0");
+    
+    const dateString = `${year}-${mon}-${day}`;
     categoryItem.todo.push({
         name:input,
         done:false,
         date: dateValue? dateValue:null,
-        id:idCount
+        id:idCount,
+        setTime:dateString
     });
     categoryItem.show=true;
     save();
