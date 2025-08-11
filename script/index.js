@@ -261,13 +261,13 @@ function todoHtml(array){
                    
                     <div class="todo-hide-block " style="display:none">
                         <img 
-                            src="/img/垃圾桶.png" 
+                            src="img/垃圾桶.png" 
                             class="todo-delet-btn finger"
                             data-category="${array.Category}"
                             data-id="${todo.id}"                        
                         >
                         <img 
-                            src="/img/打包.png" 
+                            src="img/打包.png" 
                             class="todo-archive-btn finger"
                             data-category="${array.Category}"
                             data-id="${todo.id}"                        
